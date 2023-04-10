@@ -1,10 +1,14 @@
 from django.shortcuts import render
-from markdown2 import Markdown
+#from django.http import HttpResponseRedirect
+from django.urls import reverse
 import markdown
 import random
+#from .models import Entry
+from django.shortcuts import render, redirect, get_object_or_404
 
 from . import util
 
+# Convert Markdown to HTML
 def convert_md_to_html(title):
     content = util.get_entry(title)
     markdowner = markdown.Markdown()
@@ -14,13 +18,16 @@ def convert_md_to_html(title):
         return markdowner.convert(content)
     
 
-
+# Index Page
 def index(request):
     return render(request, "encyclopedia/index.html", {
         "entries": util.list_entries()
     })
 
 
+
+
+# Entry Page
 def entry(request, title):
     html_content = convert_md_to_html(title)
     if html_content == None:
@@ -32,7 +39,8 @@ def entry(request, title):
             "title": title,
             "content": html_content
         })
-        
+ 
+# Search Button       
 def search(request):
     if request.method == "POST":
         entry_search = request.POST["q"]
@@ -52,7 +60,9 @@ def search(request):
             return render(request, "encyclopedia/search.html", {
                 "recommendation": recommendation
             })
-                    
+
+
+# New Page Entry                    
 def new_page(request):
     if request.method == "GET":
         return render(request, "encyclopedia/new.html")
@@ -71,7 +81,8 @@ def new_page(request):
                 "title": title,
                 "content": html_content
             })
-            
+
+# Edit Page check            
 def edit(request):
     if request.method == "POST":
         title = request.POST['entry_title']
@@ -80,7 +91,21 @@ def edit(request):
             "title": title,
             "content": content
         })
-        
+
+#Delete the page function from the index
+
+def delete(request):
+    if request.method == "POST":
+        title = request.POST['entry_title']
+        content = util.delete_entry(title)
+        return render(request, "encyclopedia/delete.html", {
+            "title": title,
+            "content": content
+        })
+    return render(request, "encyclopedia/index.html")
+
+
+# Save Edit Page        
 def save_edit(request):
     if request.method == "POST":
         title = request.POST['title']
@@ -91,7 +116,9 @@ def save_edit(request):
             "title": title,
             "content": html_content
         })  
-        
+
+
+# Random Page button        
 def random_page(request):
     allEntries = util.list_entries()
     random_entry = random.choice(allEntries)
@@ -101,4 +128,3 @@ def random_page(request):
         "content": html_content
     })  
     
-           
