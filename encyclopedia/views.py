@@ -92,17 +92,28 @@ def edit(request):
             "content": content
         })
 
-#Delete the page function from the index
-
+#Delete the Entry Page from the list
 def delete(request):
     if request.method == "POST":
         title = request.POST['entry_title']
-        content = util.delete_entry(title)
+        content = util.get_entry(title)
         return render(request, "encyclopedia/delete.html", {
             "title": title,
             "content": content
         })
-    return render(request, "encyclopedia/index.html")
+    
+
+
+# Confirmation of the delete page and then remove from the index page
+def delete_page(request):
+    if request.method == "POST":
+        title = request.POST['title']
+        content = util.delete_entry(title)
+        util.delete_entry(title)
+        return render(request, "encyclopedia/index.html", {
+            "title":title,
+            "content":content
+        })
 
 
 # Save Edit Page        

@@ -7,13 +7,13 @@
 {% block body %}    
     <h1>Delete Page</h1>
 
-    <form action="{% url 'delete' %}" method="POST">
+    <form action="{% url 'delete_page' %}" method="POST">
         {% csrf_token %}
-        {% comment %} <input type="hidden" name="title" value="{{ title }}">
+        <input type="hidden" name="title" value="{{ title }}">
         <p>Are you sure you want to delete this page?</p>
         <p>{{ title }}</p>
         <p>{{ content }}</p>
-        <br> {% endcomment %}
+        <br>
         <input type="submit" value="Delete" class="btn btn-danger">
         
     </form>

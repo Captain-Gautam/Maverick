@@ -11,5 +11,5 @@ urlpatterns = [
     path("save_edit/", views.save_edit, name="save_edit"),
     path("random/", views.random_page, name="random"),
     path("delete/", views.delete, name="delete"),
-    #path("delete_page/", views.delete_page, name="delete_page")
+    path("delete_page/", views.delete_page, name="delete_page"),
 ]
